@@ -5,404 +5,379 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Maquetador profesional de Excel</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
-
-  .wrap { padding: 1.5rem; max-width: 720px; margin: 0 auto; }
-
-  .header { margin-bottom: 1.5rem; }
-  .header h2 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-  .header p  { font-size: 13px; color: #555; }
-
-  .drop-zone {
-    border: 1.5px dashed #aaa;
-    border-radius: 12px;
-    background: #eef2f7;
-    padding: 2.5rem 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-    position: relative;
-  }
-  .drop-zone.hover { border-color: #378ADD; background: #ddeeff44; }
-  .drop-zone input[type=file] {
-    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
-  }
-  .drop-icon { width: 40px; height: 40px; margin: 0 auto 12px; }
-  .drop-icon svg { width: 40px; height: 40px; }
-  .drop-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-  .drop-sub   { font-size: 13px; color: #666; }
-  .drop-types { margin-top: 10px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
-  .badge {
-    font-size: 11px; padding: 2px 8px; border-radius: 99px;
-    background: #fff; border: 0.5px solid #ccc; color: #555;
-  }
-
-  .queue { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 10px; }
-
-  .file-card {
-    background: #fff;
-    border: 0.5px solid #ddd;
-    border-radius: 8px;
-    padding: 12px 14px;
-    display: flex; flex-direction: column; gap: 8px;
-  }
-  .file-top { display: flex; align-items: center; gap: 10px; }
-  .file-icon {
-    width: 32px; height: 32px; border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-weight: 700; flex-shrink: 0;
-  }
-  .file-icon.xlsx { background: #EAF3DE; color: #3B6D11; }
-  .file-icon.csv  { background: #E6F1FB; color: #185FA5; }
-  .file-name { font-size: 13px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .file-size { font-size: 12px; color: #888; flex-shrink: 0; }
-
-  .progress-bar-wrap { height: 4px; border-radius: 99px; background: #e0e0e0; overflow: hidden; }
-  .progress-bar {
-    height: 100%; border-radius: 99px; background: #378ADD;
-    transition: width 0.3s ease; width: 0%;
-  }
-  .progress-bar.done  { background: #1D9E75; }
-  .progress-bar.error { background: #E24B4A; }
-
-  .status-row { display: flex; align-items: center; justify-content: space-between; }
-  .status-text { font-size: 12px; color: #666; }
-  .status-text.done  { color: #1D9E75; }
-  .status-text.error { color: #E24B4A; }
-
-  .step-dots { display: flex; gap: 4px; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: #ccc; transition: background 0.2s; }
-  .dot.active { background: #378ADD; }
-  .dot.done   { background: #1D9E75; }
-  .dot.error  { background: #E24B4A; }
-
-  .summary {
-    background: #eef2f7; border-radius: 8px;
-    padding: 10px 14px; display: flex; align-items: center; gap: 8px;
-    font-size: 13px; color: #555; margin-top: 1.25rem;
-  }
-  .summary b { color: #1a1a2e; font-weight: 600; }
-
-  .btn-clear {
-    display: block; width: 100%; margin-top: 1rem;
-    padding: 8px; border-radius: 8px;
-    border: 0.5px solid #ccc; background: transparent;
-    color: #666; font-size: 13px; cursor: pointer;
-  }
-  .btn-clear:hover { background: #eee; }
-
-  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
-  .pulsing { animation: pulse 1.2s infinite; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1a1a2e;padding:1.5rem}
+.wrap{max-width:720px;margin:0 auto}
+.hdr h2{font-size:20px;font-weight:600;margin-bottom:4px}
+.hdr p{font-size:13px;color:#555;margin-bottom:1.25rem}
+.zone{border:1.5px dashed #aaa;border-radius:12px;background:#eef2f7;padding:2rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
+.zone.over{border-color:#378ADD;background:#ddeeff33}
+.zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
+.zi{width:36px;height:36px;margin:0 auto 10px;background:#E6F1FB;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.zi svg{width:20px;height:20px}
+.zt{font-size:14px;font-weight:600;margin-bottom:4px}
+.zs{font-size:13px;color:#666}
+.tags{margin-top:8px;display:flex;gap:5px;justify-content:center}
+.tag{font-size:11px;padding:2px 7px;border-radius:99px;background:#fff;border:.5px solid #ccc;color:#555}
+.queue{margin-top:1rem;display:flex;flex-direction:column;gap:8px}
+.card{background:#fff;border:.5px solid #ddd;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.ctop{display:flex;align-items:center;gap:8px}
+.ficon{width:30px;height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
+.ficon.xl{background:#EAF3DE;color:#3B6D11}
+.ficon.cv{background:#E6F1FB;color:#185FA5}
+.fname{font-size:12px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fsize{font-size:11px;color:#888;flex-shrink:0}
+.pbw{height:4px;border-radius:99px;background:#e0e0e0;overflow:hidden}
+.pb{height:100%;border-radius:99px;background:#378ADD;transition:width .4s ease;width:0%}
+.pb.ok{background:#1D9E75}
+.pb.err{background:#E24B4A}
+.srow{display:flex;align-items:center;justify-content:space-between}
+.stxt{font-size:11px;color:#666}
+.stxt.ok{color:#1D9E75}
+.stxt.err{color:#E24B4A}
+.dots{display:flex;gap:3px}
+.dot{width:5px;height:5px;border-radius:50%;background:#ccc;transition:background .2s}
+.dot.act{background:#378ADD}
+.dot.ok{background:#1D9E75}
+.dot.err{background:#E24B4A}
+.sum{background:#eef2f7;border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:7px;font-size:12px;color:#555;margin-top:1rem}
+.sum b{color:#1a1a2e;font-weight:600}
+.bclear{display:block;width:100%;margin-top:.75rem;padding:7px;border-radius:8px;border:.5px solid #ccc;background:transparent;color:#666;font-size:12px;cursor:pointer}
+.bclear:hover{background:#eee}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.pulse{animation:pulse 1.2s infinite}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="header">
+  <div class="hdr">
     <h2>Maquetador profesional de Excel</h2>
-    <p>Arrastra uno o varios archivos Excel o CSV. Se transformarán automáticamente y se descargarán.</p>
+    <p>Arrastra archivos Excel o CSV — se transforman y descargan automáticamente. Todo funciona en local, sin servidor.</p>
   </div>
-
-  <div class="drop-zone" id="dropZone">
-    <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv,.tsv">
-    <div class="drop-icon">
-      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="40" height="40" rx="8" fill="#E6F1FB"/>
-        <path d="M20 10v14M14 18l6 6 6-6" stroke="#378ADD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M12 28h16" stroke="#378ADD" stroke-width="2" stroke-linecap="round"/>
+  <div class="zone" id="zone">
+    <input type="file" id="fin" multiple accept=".xlsx,.xls,.csv,.tsv">
+    <div class="zi">
+      <svg viewBox="0 0 20 20" fill="none">
+        <path d="M10 3v10M6 9l4 4 4-4" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M4 16h12" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
     </div>
-    <div class="drop-title">Arrastra archivos aquí</div>
-    <div class="drop-sub">o haz clic para seleccionarlos</div>
-    <div class="drop-types">
-      <span class="badge">.xlsx</span>
-      <span class="badge">.xls</span>
-      <span class="badge">.csv</span>
-      <span class="badge">.tsv</span>
+    <div class="zt">Arrastra archivos aquí</div>
+    <div class="zs">o haz clic para seleccionar</div>
+    <div class="tags">
+      <span class="tag">.xlsx</span>
+      <span class="tag">.xls</span>
+      <span class="tag">.csv</span>
+      <span class="tag">.tsv</span>
     </div>
   </div>
-
   <div class="queue" id="queue"></div>
-  <div id="summaryArea"></div>
+  <div id="foot"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
-const dropZone    = document.getElementById('dropZone');
-const fileInput   = document.getElementById('fileInput');
-const queue       = document.getElementById('queue');
-const summaryArea = document.getElementById('summaryArea');
+const zone = document.getElementById('zone');
+const fin  = document.getElementById('fin');
+const q    = document.getElementById('queue');
+const foot = document.getElementById('foot');
+const STEPS = ['Leyendo','Analizando','Formateando','Guardando','Descargando'];
+let stats = {t:0, d:0, e:0};
 
-let stats = { total: 0, done: 0, errors: 0 };
+zone.addEventListener('dragover',  ev => { ev.preventDefault(); zone.classList.add('over'); });
+zone.addEventListener('dragleave', ()  => zone.classList.remove('over'));
+zone.addEventListener('drop',      ev  => { ev.preventDefault(); zone.classList.remove('over'); go(ev.dataTransfer.files); });
+fin.addEventListener('change',     ()  => go(fin.files));
 
-const STEPS = ['Leyendo archivo', 'Analizando estructura', 'Generando diseño', 'Aplicando formato', 'Descargando'];
-
-dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('hover'); });
-dropZone.addEventListener('dragleave', () => dropZone.classList.remove('hover'));
-dropZone.addEventListener('drop',      e => { e.preventDefault(); dropZone.classList.remove('hover'); handleFiles(e.dataTransfer.files); });
-fileInput.addEventListener('change',   () => handleFiles(fileInput.files));
-
-function handleFiles(files) {
+function go(files) {
   [...files].forEach(f => {
     const ext = f.name.split('.').pop().toLowerCase();
     if (!['xlsx','xls','csv','tsv'].includes(ext)) return;
-    stats.total++;
-    processFile(f);
+    stats.t++;
+    run(f, ext);
   });
 }
 
-function createCard(file, ext) {
-  const id   = 'fc-' + Date.now() + Math.random().toString(36).slice(2);
-  const card = document.createElement('div');
-  card.className = 'file-card';
-  card.id = id;
-  const sizeKb = (file.size / 1024).toFixed(1);
-  card.innerHTML = `
-    <div class="file-top">
-      <div class="file-icon ${['xlsx','xls'].includes(ext) ? 'xlsx' : 'csv'}">${ext.toUpperCase()}</div>
-      <span class="file-name" title="${file.name}">${file.name}</span>
-      <span class="file-size">${sizeKb} KB</span>
+function mkCard(f, ext) {
+  const id = 'c' + Date.now() + Math.random().toString(36).slice(2);
+  const kb = (f.size / 1024).toFixed(1);
+  const isXl = ['xlsx','xls'].includes(ext);
+  const el = document.createElement('div');
+  el.className = 'card'; el.id = id;
+  el.innerHTML = `
+    <div class="ctop">
+      <div class="ficon ${isXl ? 'xl' : 'cv'}">${ext.toUpperCase()}</div>
+      <span class="fname" title="${f.name}">${f.name}</span>
+      <span class="fsize">${kb} KB</span>
     </div>
-    <div class="progress-bar-wrap"><div class="progress-bar" id="pb-${id}"></div></div>
-    <div class="status-row">
-      <span class="status-text pulsing" id="st-${id}">Preparando...</span>
-      <div class="step-dots" id="dots-${id}">
-        ${STEPS.map((_,i) => `<div class="dot" id="dot-${id}-${i}" title="${STEPS[i]}"></div>`).join('')}
-      </div>
-    </div>
-  `;
-  queue.appendChild(card);
+    <div class="pbw"><div class="pb" id="pb${id}"></div></div>
+    <div class="srow">
+      <span class="stxt pulse" id="st${id}">Preparando...</span>
+      <div class="dots">${STEPS.map((_,i) => `<div class="dot" id="d${id}${i}" title="${STEPS[i]}"></div>`).join('')}</div>
+    </div>`;
+  q.appendChild(el);
   return id;
 }
 
-function setStep(id, step, pct, msg, state='') {
-  const pb = document.getElementById('pb-' + id);
-  const st = document.getElementById('st-' + id);
+function upd(id, step, pct, msg, state='') {
+  const pb = document.getElementById('pb' + id);
+  const st = document.getElementById('st' + id);
   if (!pb || !st) return;
   pb.style.width = pct + '%';
-  if (state === 'done')  { pb.classList.add('done');  st.classList.add('done');  st.classList.remove('pulsing'); }
-  if (state === 'error') { pb.classList.add('error'); st.classList.add('error'); st.classList.remove('pulsing'); }
+  pb.className = 'pb' + (state==='ok' ? ' ok' : state==='err' ? ' err' : '');
+  st.className  = 'stxt' + (state==='ok' ? ' ok' : state==='err' ? ' err' : ' pulse');
   st.textContent = msg;
   for (let i = 0; i < STEPS.length; i++) {
-    const d = document.getElementById(`dot-${id}-${i}`);
+    const d = document.getElementById(`d${id}${i}`);
     if (!d) continue;
     d.className = 'dot';
-    if (i < step)   d.classList.add('done');
-    if (i === step) d.classList.add(state === 'error' ? 'error' : 'active');
+    if (i < step)  d.classList.add('ok');
+    else if (i === step) d.classList.add(state==='err' ? 'err' : 'act');
   }
 }
 
-async function processFile(file) {
-  const ext = file.name.split('.').pop().toLowerCase();
-  const id  = createCard(file, ext);
+const w = ms => new Promise(r => setTimeout(r, ms));
 
+async function run(file, ext) {
+  const id = mkCard(file, ext);
   try {
-    setStep(id, 0, 10, 'Leyendo archivo…');
-    await delay(300);
-    const rawData = await readFile(file);
+    upd(id, 0, 10, 'Leyendo archivo...');
+    const { rows } = await readFile(file, ext);
+    await w(150);
 
-    setStep(id, 1, 25, 'Analizando estructura…');
-    await delay(200);
+    upd(id, 1, 30, 'Analizando estructura...');
+    await w(150);
+    const info = analyze(rows);
 
-    setStep(id, 2, 45, 'Generando diseño con IA…');
-    await callClaudeForPython(rawData, file.name);
+    upd(id, 2, 55, 'Aplicando diseño profesional...');
+    await w(200);
+    const blob = buildXlsx(rows, info, file.name);
 
-    setStep(id, 3, 70, 'Aplicando formato profesional…');
-    await delay(300);
-    const xlsxBlob = await generateStyledXlsx(rawData, file.name);
+    upd(id, 3, 80, 'Generando archivo...');
+    await w(150);
 
-    setStep(id, 4, 92, 'Descargando…');
-    await delay(200);
+    upd(id, 4, 95, 'Descargando...');
     const outName = file.name.replace(/\.(xlsx|xls|csv|tsv)$/i, '') + '_PRO.xlsx';
-    triggerDownload(xlsxBlob, outName);
+    download(blob, outName);
+    await w(200);
 
-    setStep(id, 4, 100, `Listo — ${outName}`, 'done');
-    stats.done++;
-    updateSummary();
-
+    upd(id, 4, 100, 'Listo — ' + outName, 'ok');
+    stats.d++;
   } catch(err) {
-    setStep(id, 0, 100, 'Error: ' + err.message, 'error');
-    stats.errors++;
-    updateSummary();
+    upd(id, 0, 100, 'Error: ' + err.message, 'err');
+    stats.e++;
   }
+  updateFoot();
 }
 
-function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
-
-function readFile(file) {
-  return new Promise((resolve, reject) => {
-    const ext = file.name.split('.').pop().toLowerCase();
-    const reader = new FileReader();
+function readFile(file, ext) {
+  return new Promise((res, rej) => {
+    const r = new FileReader();
     if (['csv','tsv'].includes(ext)) {
-      reader.onload  = e => resolve(e.target.result);
-      reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
-      reader.readAsText(file, 'UTF-8');
-    } else {
-      reader.onload = e => {
-        try {
-          const data = new Uint8Array(e.target.result);
-          const wb   = XLSX.read(data, { type: 'array' });
-          const rows = [];
-          wb.SheetNames.forEach(sn => {
-            const ws  = wb.Sheets[sn];
-            const csv = XLSX.utils.sheet_to_csv(ws);
-            rows.push(`## Sheet: ${sn}\n${csv}`);
-          });
-          resolve(rows.join('\n\n'));
-        } catch(ex) { reject(new Error('Formato no reconocido')); }
+      r.onload = e => {
+        const sep  = ext === 'tsv' ? '\t' : detectSep(e.target.result);
+        const rows = parseCSV(e.target.result, sep);
+        res({ rows });
       };
-      reader.onerror = () => reject(new Error('Error de lectura'));
-      reader.readAsArrayBuffer(file);
+      r.onerror = () => rej(new Error('No se pudo leer'));
+      r.readAsText(file, 'UTF-8');
+    } else {
+      r.onload = e => {
+        try {
+          const wb   = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
+          const ws   = wb.Sheets[wb.SheetNames[0]];
+          const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+          res({ rows });
+        } catch(ex) { rej(new Error('Formato no reconocido')); }
+      };
+      r.onerror = () => rej(new Error('Error de lectura'));
+      r.readAsArrayBuffer(file);
     }
   });
 }
 
-async function callClaudeForPython(csvText, fileName) {
-  const prompt = `Eres un experto en diseño de hojas de cálculo Excel profesionales con Python y openpyxl.
-
-Aquí están los datos de un archivo llamado "${fileName}":
-\`\`\`
-${csvText.slice(0, 6000)}
-\`\`\`
-
-Genera un script Python COMPLETO y ejecutable que:
-1. Lea los datos con pandas desde un archivo llamado input_data.csv (ya generado)
-2. Cree un nuevo Excel con openpyxl aplicando estas reglas de diseño profesional:
-   - Paleta oscura: header navy #0D1B2A, secciones #1B3A5C, acento #1565C0, cyan #00BCD4
-   - Fila 1: título del documento (tamaño 18, bold, blanco sobre #0D1B2A), alto 36
-   - Fila 2: subtítulo/info (tamaño 13, color #90CAF9 sobre #0D1B2A), alto 24
-   - Fila 3: cabecera de columnas (bold, blanco sobre #1565C0), alto 22
-   - Filas de datos: alternancia #F5F9FF / #E8EEF4, texto #0D1B2A, alto 18
-   - Si existen secciones temáticas, resáltalas con colores de fondo apropiados
-   - Bordes finos #B0BEC5 en todas las celdas de datos
-   - Bordes medium #00BCD4 en cabeceras de sección
-   - showGridLines = False, freeze_panes en primera fila de datos
-   - Configuración de impresión A4 portrait fitToWidth=1
-   - Footer final: "Web de Javi: _TJ · Servicio profesional"
-3. Guarde como output_styled.xlsx
-
-Responde ÚNICAMENTE con el código Python completo entre triple backticks python, sin explicaciones.`;
-
-  const resp = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      model: 'claude-sonnet-4-20250514',
-      max_tokens: 3000,
-      messages: [{ role: 'user', content: prompt }]
-    })
-  });
-
-  if (!resp.ok) throw new Error(`API error ${resp.status}`);
-  const data = await resp.json();
-  return data.content.map(b => b.text || '').join('');
+function detectSep(text) {
+  const line = text.split('\n')[0] || '';
+  return ((line.match(/;/g) || []).length > (line.match(/,/g) || []).length) ? ';' : ',';
 }
 
-async function generateStyledXlsx(csvText, fileName) {
-  const lines = csvText.split('\n').filter(l => l.trim());
-  const rows  = lines.map(l => l.split(',').map(c => c.replace(/^"|"$/g,'').trim()));
-  const wb    = XLSX.utils.book_new();
+function parseCSV(text, sep) {
+  return text.split('\n').filter(l => l.trim()).map(l => {
+    const cells = []; let cur = '', inQ = false;
+    for (let i = 0; i < l.length; i++) {
+      if (l[i] === '"') { inQ = !inQ; }
+      else if (l[i] === sep && !inQ) { cells.push(cur.trim()); cur = ''; }
+      else cur += l[i];
+    }
+    cells.push(cur.trim());
+    return cells;
+  });
+}
 
-  const NAVY = 'FF0D1B2A', ACC = 'FF1565C0', GRVL = 'FFB0BEC5';
-  const WHITE = 'FFFFFFFF', R1 = 'FFF5F9FF', R2 = 'FFE8EEF4', DARK = 'FF0D1B2A';
+function analyze(rows) {
+  if (!rows.length) return { cols: 0, hasHeader: false, sections: [] };
+  const cols = Math.max(...rows.map(r => r.length));
+  const first = rows[0].map(c => String(c));
+  const hasHeader = first.some(c => isNaN(c) && c.length > 0);
+  const sections = [];
+  rows.forEach((r, i) => {
+    if (i === 0) return;
+    const filled = r.filter(c => String(c).trim()).length;
+    if (filled === 1 && cols > 1) {
+      const v = String(r[0] || r.find(x => x));
+      if (v && v.length > 3 && v.length < 80) sections.push(i);
+    }
+  });
+  return { cols, hasHeader, sections };
+}
 
+function buildXlsx(rows, info, fileName) {
+  const { cols, hasHeader, sections } = info;
+  const C  = cols || 1;
+  const wb = XLSX.utils.book_new();
   const ws = {};
-  const baseName  = fileName.replace(/\.(xlsx|xls|csv|tsv)$/i,'');
-  const totalCols = Math.max(...rows.map(r => r.length), 1);
+  if (!ws['!rows']) ws['!rows'] = [];
 
-  const mkFill   = (argb) => ({ patternType: 'solid', fgColor: { argb } });
-  const mkFont   = (sz, bold, argb) => ({ sz, bold, color: { argb }, name: 'Calibri' });
-  const mkBorder = (style, argb) => { const s = { style, color:{argb} }; return { top:s, bottom:s, left:s, right:s }; };
-  const mkAlign  = (h='center') => ({ horizontal:h, vertical:'center', wrapText:false });
+  const NAVY = 'FF0D1B2A', MID  = 'FF1B3A5C', ACC  = 'FF1565C0', CYAN = 'FF00BCD4';
+  const WHITE = 'FFFFFFFF', SUB  = 'FF90CAF9', DARK = 'FF0D1B2A';
+  const R1   = 'FFF5F9FF',  R2   = 'FFE8EEF4', GREY = 'FFB0BEC5';
+  const SEC_COLORS = [
+    ['FF004D40','FF00695C'], ['FF0D47A1','FF1565C0'],
+    ['FF1B5E20','FF2E7D32'], ['FF006064','FF00838F'],
+    ['FF4A148C','FF6A1B9A'], ['FF37474F','FF455A64'],
+  ];
+
+  const s  = argb         => ({ patternType: 'solid', fgColor: { argb } });
+  const f  = (sz,bold,argb) => ({ sz, bold, color: { argb }, name: 'Calibri' });
+  const b  = (st, argb)   => { const x = { style: st, color: { argb } }; return { top:x, bottom:x, left:x, right:x }; };
+  const al = (h, v='center', wrap=false) => ({ horizontal: h, vertical: v, wrapText: wrap });
 
   let R = 0;
 
-  const addRow = (vals, fillArgb, fontSz, fontBold, fontArgb, alignH='center', height=22, border=null) => {
-    R++;
-    if (!ws['!rows']) ws['!rows'] = [];
-    ws['!rows'][R-1] = { hpt: height };
-    for (let c = 0; c < Math.max(vals.length, totalCols); c++) {
-      const addr = XLSX.utils.encode_cell({ r:R-1, c });
-      ws[addr] = {
-        v: c < vals.length ? vals[c] : '', t: 's',
-        s: {
-          fill:      mkFill(fillArgb),
-          font:      mkFont(fontSz, fontBold, fontArgb),
-          alignment: mkAlign(c === 0 ? 'center' : alignH),
-          border:    border || mkBorder('thin', GRVL)
-        }
-      };
-    }
+  const cell = (r, c, v, fill, font, align, border) => {
+    const addr = XLSX.utils.encode_cell({ r, c });
+    ws[addr] = { v: v ?? '', t: 's', s: { fill, font, alignment: align, border } };
   };
 
-  addRow([baseName.replace(/_/g,' ').toUpperCase()], NAVY, 18, true, WHITE, 'center', 36,
-    { top: {style:'medium',color:{argb:'FF00BCD4'}}, bottom: {style:'thin',color:{argb:ACC}},
-      left:{style:'medium',color:{argb:'FF00BCD4'}}, right:{style:'medium',color:{argb:'FF00BCD4'}} });
+  const row = (vals, fillA, fSz, fBold, fColor, aH, h, brd) => {
+    ws['!rows'][R] = { hpt: h || 18 };
+    for (let c = 0; c < C; c++) {
+      cell(R, c,
+        c < vals.length ? String(vals[c] ?? '') : '',
+        s(fillA), f(fSz, fBold, fColor),
+        al(c === 0 && C > 1 ? 'center' : aH),
+        brd || b('thin', GREY)
+      );
+    }
+    R++;
+  };
 
-  if (rows.length > 0) {
-    addRow(rows[0], ACC, 10, true, WHITE, 'center', 22, mkBorder('thin', NAVY));
-    for (let i = 1; i < rows.length; i++) {
-      addRow(rows[i], i % 2 === 0 ? R2 : R1, 10, false, DARK, 'left', 18);
+  const baseName = fileName.replace(/\.(xlsx|xls|csv|tsv)$/i, '').replace(/_/g,' ').toUpperCase();
+
+  row([baseName], NAVY, 16, true, WHITE, 'center', 34,
+    { top:    { style:'medium', color:{ argb:CYAN } },
+      bottom: { style:'thin',   color:{ argb:ACC  } },
+      left:   { style:'medium', color:{ argb:CYAN } },
+      right:  { style:'medium', color:{ argb:CYAN } } });
+
+  row(['Documento generado por Maquetador Pro · Web de Javi: _TJ'],
+    MID, 9, false, SUB, 'center', 16, b('thin', MID));
+
+  if (hasHeader && rows.length > 0) {
+    ws['!rows'][R] = { hpt: 22 };
+    rows[0].forEach((v, c) => {
+      cell(R, c, String(v ?? ''), s(ACC), f(10, true, WHITE), al('center'), b('thin', NAVY));
+    });
+    R++;
+  }
+
+  let secIdx = 0;
+  const startData = hasHeader ? 1 : 0;
+  let altI = 0;
+
+  for (let i = startData; i < rows.length; i++) {
+    const isSec = sections.includes(i);
+    if (isSec) {
+      const [bg, acc] = SEC_COLORS[secIdx % SEC_COLORS.length]; secIdx++;
+      const v = String(rows[i].find(x => String(x).trim()) || '');
+      ws['!rows'][R] = { hpt: 20 };
+      for (let c = 0; c < C; c++) {
+        cell(R, c, c === 0 ? v : '', s(bg), f(10, true, WHITE), al('left'),
+          { top:    { style:'medium', color:{ argb:CYAN } },
+            bottom: { style:'thin',   color:{ argb:acc  } },
+            left:   { style:'medium', color:{ argb:CYAN } },
+            right:  { style:'medium', color:{ argb:CYAN } } });
+      }
+      R++; altI = 0;
+    } else {
+      const bg = altI % 2 === 0 ? R1 : R2; altI++;
+      ws['!rows'][R] = { hpt: 18 };
+      rows[i].forEach((v, c) => {
+        const isNum = !isNaN(String(v).trim()) && String(v).trim() !== '';
+        cell(R, c, String(v ?? ''), s(bg), f(10, false, DARK),
+          al(isNum ? 'center' : 'left'), b('thin', GREY));
+      });
+      R++;
     }
   }
 
-  addRow(['Web de Javi: _TJ · Servicio profesional de maquetación'], NAVY, 9, false, 'FF78909C', 'center', 18);
+  row(['Web de Javi: _TJ  ·  Maquetador profesional  ·  Ayuntamiento de Llanes'],
+    NAVY, 8, false, 'FF78909C', 'center', 16, b('thin', NAVY));
 
   const merges = [];
-  if (totalCols > 1) {
-    merges.push({ s:{r:0,c:0}, e:{r:0,c:totalCols-1} });
-    merges.push({ s:{r:R-1,c:0}, e:{r:R-1,c:totalCols-1} });
+  if (C > 1) {
+    merges.push({ s:{r:0,c:0}, e:{r:0,c:C-1} });
+    merges.push({ s:{r:1,c:0}, e:{r:1,c:C-1} });
+    merges.push({ s:{r:R-1,c:0}, e:{r:R-1,c:C-1} });
+    sections.forEach(si => {
+      const xlRow = si + (hasHeader ? 3 : 2);
+      if (xlRow < R) merges.push({ s:{r:xlRow,c:0}, e:{r:xlRow,c:C-1} });
+    });
   }
   ws['!merges'] = merges;
-  ws['!ref']    = XLSX.utils.encode_range({ r:0,c:0 }, { r:R-1, c:totalCols-1 });
+  ws['!ref']    = XLSX.utils.encode_range({ r:0, c:0 }, { r:R-1, c:C-1 });
 
-  const colWidths = [];
-  for (let c = 0; c < totalCols; c++) {
-    const maxW = Math.max(...rows.map(r => (r[c]||'').toString().length), 8);
-    colWidths.push({ wch: Math.min(maxW + 4, 45) });
+  const colW = [];
+  for (let c = 0; c < C; c++) {
+    const mx = Math.max(...rows.map(r => String(r[c] || '').length), 6);
+    colW.push({ wch: Math.min(mx + 4, 48) });
   }
-  ws['!cols']      = colWidths;
-  ws['!sheetView'] = { showGridLines: false };
-  ws['!freeze']    = { xSplit: 0, ySplit: 2 };
+  ws['!cols'] = colW;
 
   XLSX.utils.book_append_sheet(wb, ws, 'Datos');
 
-  const wbOut = XLSX.write(wb, { bookType:'xlsx', type:'array', cellStyles:true });
-  return new Blob([wbOut], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const out = XLSX.write(wb, { bookType:'xlsx', type:'array', cellStyles:true });
+  return new Blob([out], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
 }
 
-function triggerDownload(blob, name) {
+function download(blob, name) {
   const url = URL.createObjectURL(blob);
   const a   = document.createElement('a');
   a.href = url; a.download = name;
-  document.body.appendChild(a);
-  a.click();
+  document.body.appendChild(a); a.click();
   setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
 }
 
-function updateSummary() {
-  if (stats.total === 0) { summaryArea.innerHTML = ''; return; }
-  const pending = stats.total - stats.done - stats.errors;
-  let html = `<div class="summary">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-      <circle cx="8" cy="8" r="7" stroke="#1D9E75" stroke-width="1.5"/>
-      <path d="M5 8l2 2 4-4" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
+function updateFoot() {
+  const pen = stats.t - stats.d - stats.e;
+  let html = `<div class="sum">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+      <circle cx="7" cy="7" r="6" stroke="#1D9E75" stroke-width="1.2"/>
+      <path d="M4 7l2 2 4-4" stroke="#1D9E75" stroke-width="1.2" stroke-linecap="round"/>
     </svg>
     <span>
-      <b>${stats.done}</b> completado${stats.done!==1?'s':''} ·
-      <b>${stats.errors}</b> error${stats.errors!==1?'es':''}
-      ${pending > 0 ? `· <b>${pending}</b> en proceso` : ''}
+      <b>${stats.d}</b> completado${stats.d!==1?'s':''} ·
+      <b>${stats.e}</b> error${stats.e!==1?'es':''}
+      ${pen > 0 ? `· <b>${pen}</b> en proceso` : ''}
     </span>
   </div>`;
-  if (pending === 0) html += `<button class="btn-clear" id="clearBtn">Limpiar lista</button>`;
-  summaryArea.innerHTML = html;
-  const cb = document.getElementById('clearBtn');
-  if (cb) cb.addEventListener('click', () => {
-    queue.innerHTML = '';
-    summaryArea.innerHTML = '';
-    stats = { total:0, done:0, errors:0 };
-    fileInput.value = '';
-  });
+  if (pen === 0) html += `<button class="bclear" id="bcl">Limpiar lista</button>`;
+  foot.innerHTML = html;
+  const btn = document.getElementById('bcl');
+  if (btn) btn.onclick = () => {
+    q.innerHTML = ''; foot.innerHTML = '';
+    stats = {t:0, d:0, e:0}; fin.value = '';
+  };
 }
 </script>
 </body>
