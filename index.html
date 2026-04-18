@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maquetador profesional de Excel</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #f4f6f9; color: #1a1a2e; }
+
+  .wrap { padding: 1.5rem; max-width: 720px; margin: 0 auto; }
+
+  .header { margin-bottom: 1.5rem; }
+  .header h2 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+  .header p  { font-size: 13px; color: #555; }
+
+  .drop-zone {
+    border: 1.5px dashed #aaa;
+    border-radius: 12px;
+    background: #eef2f7;
+    padding: 2.5rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    position: relative;
+  }
+  .drop-zone.hover { border-color: #378ADD; background: #ddeeff44; }
+  .drop-zone input[type=file] {
+    position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+  }
+  .drop-icon { width: 40px; height: 40px; margin: 0 auto 12px; }
+  .drop-icon svg { width: 40px; height: 40px; }
+  .drop-title { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+  .drop-sub   { font-size: 13px; color: #666; }
+  .drop-types { margin-top: 10px; display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .badge {
+    font-size: 11px; padding: 2px 8px; border-radius: 99px;
+    background: #fff; border: 0.5px solid #ccc; color: #555;
+  }
+
+  .queue { margin-top: 1.25rem; display: flex; flex-direction: column; gap: 10px; }
+
+  .file-card {
+    background: #fff;
+    border: 0.5px solid #ddd;
+    border-radius: 8px;
+    padding: 12px 14px;
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .file-top { display: flex; align-items: center; gap: 10px; }
+  .file-icon {
+    width: 32px; height: 32px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; flex-shrink: 0;
+  }
+  .file-icon.xlsx { background: #EAF3DE; color: #3B6D11; }
+  .file-icon.csv  { background: #E6F1FB; color: #185FA5; }
+  .file-name { font-size: 13px; font-weight: 600; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-size { font-size: 12px; color: #888; flex-shrink: 0; }
+
+  .progress-bar-wrap { height: 4px; border-radius: 99px; background: #e0e0e0; overflow: hidden; }
+  .progress-bar {
+    height: 100%; border-radius: 99px; background: #378ADD;
+    transition: width 0.3s ease; width: 0%;
+  }
+  .progress-bar.done  { background: #1D9E75; }
+  .progress-bar.error { background: #E24B4A; }
+
+  .status-row { display: flex; align-items: center; justify-content: space-between; }
+  .status-text { font-size: 12px; color: #666; }
+  .status-text.done  { color: #1D9E75; }
+  .status-text.error { color: #E24B4A; }
+
+  .step-dots { display: flex; gap: 4px; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: #ccc; transition: background 0.2s; }
+  .dot.active { background: #378ADD; }
+  .dot.done   { background: #1D9E75; }
+  .dot.error  { background: #E24B4A; }
+
+  .summary {
+    background: #eef2f7; border-radius: 8px;
+    padding: 10px 14px; display: flex; align-items: center; gap: 8px;
+    font-size: 13px; color: #555; margin-top: 1.25rem;
+  }
+  .summary b { color: #1a1a2e; font-weight: 600; }
+
+  .btn-clear {
+    display: block; width: 100%; margin-top: 1rem;
+    padding: 8px; border-radius: 8px;
+    border: 0.5px solid #ccc; background: transparent;
+    color: #666; font-size: 13px; cursor: pointer;
+  }
+  .btn-clear:hover { background: #eee; }
+
+  @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+  .pulsing { animation: pulse 1.2s infinite; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="header">
+    <h2>Maquetador profesional de Excel</h2>
+    <p>Arrastra uno o varios archivos Excel o CSV. Se transformarán automáticamente y se descargarán.</p>
+  </div>
+
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="fileInput" multiple accept=".xlsx,.xls,.csv,.tsv">
+    <div class="drop-icon">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="40" height="40" rx="8" fill="#E6F1FB"/>
+        <path d="M20 10v14M14 18l6 6 6-6" stroke="#378ADD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M12 28h16" stroke="#378ADD" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="drop-title">Arrastra archivos aquí</div>
+    <div class="drop-sub">o haz clic para seleccionarlos</div>
+    <div class="drop-types">
+      <span class="badge">.xlsx</span>
+      <span class="badge">.xls</span>
+      <span class="badge">.csv</span>
+      <span class="badge">.tsv</span>
+    </div>
+  </div>
+
+  <div class="queue" id="queue"></div>
+  <div id="summaryArea"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script>
+const dropZone    = document.getElementById('dropZone');
+const fileInput   = document.getElementById('fileInput');
+const queue       = document.getElementById('queue');
+const summaryArea = document.getElementById('summaryArea');
+
+let stats = { total: 0, done: 0, errors: 0 };
+
+const STEPS = ['Leyendo archivo', 'Analizando estructura', 'Generando diseño', 'Aplicando formato', 'Descargando'];
+
+dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('hover'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('hover'));
+dropZone.addEventListener('drop',      e => { e.preventDefault(); dropZone.classList.remove('hover'); handleFiles(e.dataTransfer.files); });
+fileInput.addEventListener('change',   () => handleFiles(fileInput.files));
+
+function handleFiles(files) {
+  [...files].forEach(f => {
+    const ext = f.name.split('.').pop().toLowerCase();
+    if (!['xlsx','xls','csv','tsv'].includes(ext)) return;
+    stats.total++;
+    processFile(f);
+  });
+}
+
+function createCard(file, ext) {
+  const id   = 'fc-' + Date.now() + Math.random().toString(36).slice(2);
+  const card = document.createElement('div');
+  card.className = 'file-card';
+  card.id = id;
+  const sizeKb = (file.size / 1024).toFixed(1);
+  card.innerHTML = `
+    <div class="file-top">
+      <div class="file-icon ${['xlsx','xls'].includes(ext) ? 'xlsx' : 'csv'}">${ext.toUpperCase()}</div>
+      <span class="file-name" title="${file.name}">${file.name}</span>
+      <span class="file-size">${sizeKb} KB</span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="pb-${id}"></div></div>
+    <div class="status-row">
+      <span class="status-text pulsing" id="st-${id}">Preparando...</span>
+      <div class="step-dots" id="dots-${id}">
+        ${STEPS.map((_,i) => `<div class="dot" id="dot-${id}-${i}" title="${STEPS[i]}"></div>`).join('')}
+      </div>
+    </div>
+  `;
+  queue.appendChild(card);
+  return id;
+}
+
+function setStep(id, step, pct, msg, state='') {
+  const pb = document.getElementById('pb-' + id);
+  const st = document.getElementById('st-' + id);
+  if (!pb || !st) return;
+  pb.style.width = pct + '%';
+  if (state === 'done')  { pb.classList.add('done');  st.classList.add('done');  st.classList.remove('pulsing'); }
+  if (state === 'error') { pb.classList.add('error'); st.classList.add('error'); st.classList.remove('pulsing'); }
+  st.textContent = msg;
+  for (let i = 0; i < STEPS.length; i++) {
+    const d = document.getElementById(`dot-${id}-${i}`);
+    if (!d) continue;
+    d.className = 'dot';
+    if (i < step)   d.classList.add('done');
+    if (i === step) d.classList.add(state === 'error' ? 'error' : 'active');
+  }
+}
+
+async function processFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  const id  = createCard(file, ext);
+
+  try {
+    setStep(id, 0, 10, 'Leyendo archivo…');
+    await delay(300);
+    const rawData = await readFile(file);
+
+    setStep(id, 1, 25, 'Analizando estructura…');
+    await delay(200);
+
+    setStep(id, 2, 45, 'Generando diseño con IA…');
+    await callClaudeForPython(rawData, file.name);
+
+    setStep(id, 3, 70, 'Aplicando formato profesional…');
+    await delay(300);
+    const xlsxBlob = await generateStyledXlsx(rawData, file.name);
+
+    setStep(id, 4, 92, 'Descargando…');
+    await delay(200);
+    const outName = file.name.replace(/\.(xlsx|xls|csv|tsv)$/i, '') + '_PRO.xlsx';
+    triggerDownload(xlsxBlob, outName);
+
+    setStep(id, 4, 100, `Listo — ${outName}`, 'done');
+    stats.done++;
+    updateSummary();
+
+  } catch(err) {
+    setStep(id, 0, 100, 'Error: ' + err.message, 'error');
+    stats.errors++;
+    updateSummary();
+  }
+}
+
+function delay(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function readFile(file) {
+  return new Promise((resolve, reject) => {
+    const ext = file.name.split('.').pop().toLowerCase();
+    const reader = new FileReader();
+    if (['csv','tsv'].includes(ext)) {
+      reader.onload  = e => resolve(e.target.result);
+      reader.onerror = () => reject(new Error('No se pudo leer el archivo'));
+      reader.readAsText(file, 'UTF-8');
+    } else {
+      reader.onload = e => {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const wb   = XLSX.read(data, { type: 'array' });
+          const rows = [];
+          wb.SheetNames.forEach(sn => {
+            const ws  = wb.Sheets[sn];
+            const csv = XLSX.utils.sheet_to_csv(ws);
+            rows.push(`## Sheet: ${sn}\n${csv}`);
+          });
+          resolve(rows.join('\n\n'));
+        } catch(ex) { reject(new Error('Formato no reconocido')); }
+      };
+      reader.onerror = () => reject(new Error('Error de lectura'));
+      reader.readAsArrayBuffer(file);
+    }
+  });
+}
+
+async function callClaudeForPython(csvText, fileName) {
+  const prompt = `Eres un experto en diseño de hojas de cálculo Excel profesionales con Python y openpyxl.
+
+Aquí están los datos de un archivo llamado "${fileName}":
+\`\`\`
+${csvText.slice(0, 6000)}
+\`\`\`
+
+Genera un script Python COMPLETO y ejecutable que:
+1. Lea los datos con pandas desde un archivo llamado input_data.csv (ya generado)
+2. Cree un nuevo Excel con openpyxl aplicando estas reglas de diseño profesional:
+   - Paleta oscura: header navy #0D1B2A, secciones #1B3A5C, acento #1565C0, cyan #00BCD4
+   - Fila 1: título del documento (tamaño 18, bold, blanco sobre #0D1B2A), alto 36
+   - Fila 2: subtítulo/info (tamaño 13, color #90CAF9 sobre #0D1B2A), alto 24
+   - Fila 3: cabecera de columnas (bold, blanco sobre #1565C0), alto 22
+   - Filas de datos: alternancia #F5F9FF / #E8EEF4, texto #0D1B2A, alto 18
+   - Si existen secciones temáticas, resáltalas con colores de fondo apropiados
+   - Bordes finos #B0BEC5 en todas las celdas de datos
+   - Bordes medium #00BCD4 en cabeceras de sección
+   - showGridLines = False, freeze_panes en primera fila de datos
+   - Configuración de impresión A4 portrait fitToWidth=1
+   - Footer final: "Web de Javi: _TJ · Servicio profesional"
+3. Guarde como output_styled.xlsx
+
+Responde ÚNICAMENTE con el código Python completo entre triple backticks python, sin explicaciones.`;
+
+  const resp = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 3000,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+
+  if (!resp.ok) throw new Error(`API error ${resp.status}`);
+  const data = await resp.json();
+  return data.content.map(b => b.text || '').join('');
+}
+
+async function generateStyledXlsx(csvText, fileName) {
+  const lines = csvText.split('\n').filter(l => l.trim());
+  const rows  = lines.map(l => l.split(',').map(c => c.replace(/^"|"$/g,'').trim()));
+  const wb    = XLSX.utils.book_new();
+
+  const NAVY = 'FF0D1B2A', ACC = 'FF1565C0', GRVL = 'FFB0BEC5';
+  const WHITE = 'FFFFFFFF', R1 = 'FFF5F9FF', R2 = 'FFE8EEF4', DARK = 'FF0D1B2A';
+
+  const ws = {};
+  const baseName  = fileName.replace(/\.(xlsx|xls|csv|tsv)$/i,'');
+  const totalCols = Math.max(...rows.map(r => r.length), 1);
+
+  const mkFill   = (argb) => ({ patternType: 'solid', fgColor: { argb } });
+  const mkFont   = (sz, bold, argb) => ({ sz, bold, color: { argb }, name: 'Calibri' });
+  const mkBorder = (style, argb) => { const s = { style, color:{argb} }; return { top:s, bottom:s, left:s, right:s }; };
+  const mkAlign  = (h='center') => ({ horizontal:h, vertical:'center', wrapText:false });
+
+  let R = 0;
+
+  const addRow = (vals, fillArgb, fontSz, fontBold, fontArgb, alignH='center', height=22, border=null) => {
+    R++;
+    if (!ws['!rows']) ws['!rows'] = [];
+    ws['!rows'][R-1] = { hpt: height };
+    for (let c = 0; c < Math.max(vals.length, totalCols); c++) {
+      const addr = XLSX.utils.encode_cell({ r:R-1, c });
+      ws[addr] = {
+        v: c < vals.length ? vals[c] : '', t: 's',
+        s: {
+          fill:      mkFill(fillArgb),
+          font:      mkFont(fontSz, fontBold, fontArgb),
+          alignment: mkAlign(c === 0 ? 'center' : alignH),
+          border:    border || mkBorder('thin', GRVL)
+        }
+      };
+    }
+  };
+
+  addRow([baseName.replace(/_/g,' ').toUpperCase()], NAVY, 18, true, WHITE, 'center', 36,
+    { top: {style:'medium',color:{argb:'FF00BCD4'}}, bottom: {style:'thin',color:{argb:ACC}},
+      left:{style:'medium',color:{argb:'FF00BCD4'}}, right:{style:'medium',color:{argb:'FF00BCD4'}} });
+
+  if (rows.length > 0) {
+    addRow(rows[0], ACC, 10, true, WHITE, 'center', 22, mkBorder('thin', NAVY));
+    for (let i = 1; i < rows.length; i++) {
+      addRow(rows[i], i % 2 === 0 ? R2 : R1, 10, false, DARK, 'left', 18);
+    }
+  }
+
+  addRow(['Web de Javi: _TJ · Servicio profesional de maquetación'], NAVY, 9, false, 'FF78909C', 'center', 18);
+
+  const merges = [];
+  if (totalCols > 1) {
+    merges.push({ s:{r:0,c:0}, e:{r:0,c:totalCols-1} });
+    merges.push({ s:{r:R-1,c:0}, e:{r:R-1,c:totalCols-1} });
+  }
+  ws['!merges'] = merges;
+  ws['!ref']    = XLSX.utils.encode_range({ r:0,c:0 }, { r:R-1, c:totalCols-1 });
+
+  const colWidths = [];
+  for (let c = 0; c < totalCols; c++) {
+    const maxW = Math.max(...rows.map(r => (r[c]||'').toString().length), 8);
+    colWidths.push({ wch: Math.min(maxW + 4, 45) });
+  }
+  ws['!cols']      = colWidths;
+  ws['!sheetView'] = { showGridLines: false };
+  ws['!freeze']    = { xSplit: 0, ySplit: 2 };
+
+  XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+
+  const wbOut = XLSX.write(wb, { bookType:'xlsx', type:'array', cellStyles:true });
+  return new Blob([wbOut], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+}
+
+function triggerDownload(blob, name) {
+  const url = URL.createObjectURL(blob);
+  const a   = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
+}
+
+function updateSummary() {
+  if (stats.total === 0) { summaryArea.innerHTML = ''; return; }
+  const pending = stats.total - stats.done - stats.errors;
+  let html = `<div class="summary">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="7" stroke="#1D9E75" stroke-width="1.5"/>
+      <path d="M5 8l2 2 4-4" stroke="#1D9E75" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <span>
+      <b>${stats.done}</b> completado${stats.done!==1?'s':''} ·
+      <b>${stats.errors}</b> error${stats.errors!==1?'es':''}
+      ${pending > 0 ? `· <b>${pending}</b> en proceso` : ''}
+    </span>
+  </div>`;
+  if (pending === 0) html += `<button class="btn-clear" id="clearBtn">Limpiar lista</button>`;
+  summaryArea.innerHTML = html;
+  const cb = document.getElementById('clearBtn');
+  if (cb) cb.addEventListener('click', () => {
+    queue.innerHTML = '';
+    summaryArea.innerHTML = '';
+    stats = { total:0, done:0, errors:0 };
+    fileInput.value = '';
+  });
+}
+</script>
+</body>
+</html>
