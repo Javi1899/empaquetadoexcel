@@ -6,64 +6,74 @@
 <title>Maquetador profesional de Excel</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1a1a2e;padding:1.5rem}
-.wrap{max-width:720px;margin:0 auto}
-.hdr h2{font-size:20px;font-weight:600;margin-bottom:4px}
-.hdr p{font-size:13px;color:#555;margin-bottom:1.25rem}
-.zone{border:1.5px dashed #aaa;border-radius:12px;background:#eef2f7;padding:2rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative}
-.zone.over{border-color:#378ADD;background:#ddeeff33}
+body{font-family:Arial,sans-serif;background:#f0f4f8;color:#1a1a2e;min-height:100vh;display:flex;align-items:flex-start;justify-content:center;padding:2rem 1rem}
+.wrap{width:100%;max-width:680px}
+.hdr{margin-bottom:1.5rem}
+.hdr h1{font-size:22px;font-weight:700;color:#0D1B2A;margin-bottom:6px}
+.hdr p{font-size:13px;color:#555;line-height:1.6}
+.notice{background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px 14px;font-size:12px;color:#856404;margin-bottom:1.25rem;display:none}
+.notice.show{display:block}
+.zone{border:2px dashed #aab4be;border-radius:14px;background:#fff;padding:2.5rem 1.5rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;position:relative;user-select:none}
+.zone.over{border-color:#1565C0;background:#e8f0fe}
 .zone input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%}
-.zi{width:36px;height:36px;margin:0 auto 10px;background:#E6F1FB;border-radius:8px;display:flex;align-items:center;justify-content:center}
-.zi svg{width:20px;height:20px}
-.zt{font-size:14px;font-weight:600;margin-bottom:4px}
-.zs{font-size:13px;color:#666}
-.tags{margin-top:8px;display:flex;gap:5px;justify-content:center}
-.tag{font-size:11px;padding:2px 7px;border-radius:99px;background:#fff;border:.5px solid #ccc;color:#555}
-.queue{margin-top:1rem;display:flex;flex-direction:column;gap:8px}
-.card{background:#fff;border:.5px solid #ddd;border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px}
-.ctop{display:flex;align-items:center;gap:8px}
-.ficon{width:30px;height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0}
-.ficon.xl{background:#EAF3DE;color:#3B6D11}
-.ficon.cv{background:#E6F1FB;color:#185FA5}
-.fname{font-size:12px;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zi{width:52px;height:52px;margin:0 auto 14px;background:#e8f0fe;border-radius:12px;display:flex;align-items:center;justify-content:center}
+.zi svg{width:28px;height:28px}
+.zt{font-size:16px;font-weight:700;color:#0D1B2A;margin-bottom:6px}
+.zs{font-size:13px;color:#666;margin-bottom:10px}
+.tags{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.tag{font-size:11px;padding:3px 10px;border-radius:99px;background:#f0f4f8;border:1px solid #cdd5df;color:#444;font-weight:600}
+.queue{margin-top:1.25rem;display:flex;flex-direction:column;gap:10px}
+.card{background:#fff;border:1px solid #dde3ea;border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:8px;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.ctop{display:flex;align-items:center;gap:10px}
+.ficon{width:34px;height:34px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;flex-shrink:0;letter-spacing:.5px}
+.ficon.xl{background:#d7f0e0;color:#1b5e20}
+.ficon.cv{background:#dbeafe;color:#1e40af}
+.fname{font-size:13px;font-weight:700;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#0D1B2A}
 .fsize{font-size:11px;color:#888;flex-shrink:0}
-.pbw{height:4px;border-radius:99px;background:#e0e0e0;overflow:hidden}
-.pb{height:100%;border-radius:99px;background:#378ADD;transition:width .4s ease;width:0%}
-.pb.ok{background:#1D9E75}
-.pb.err{background:#E24B4A}
+.pbw{height:6px;border-radius:99px;background:#e9ecef;overflow:hidden}
+.pb{height:100%;border-radius:99px;background:#1565C0;transition:width .4s ease;width:0%}
+.pb.ok{background:#1b5e20}
+.pb.err{background:#c62828}
 .srow{display:flex;align-items:center;justify-content:space-between}
-.stxt{font-size:11px;color:#666}
-.stxt.ok{color:#1D9E75}
-.stxt.err{color:#E24B4A}
-.dots{display:flex;gap:3px}
-.dot{width:5px;height:5px;border-radius:50%;background:#ccc;transition:background .2s}
-.dot.act{background:#378ADD}
-.dot.ok{background:#1D9E75}
-.dot.err{background:#E24B4A}
-.sum{background:#eef2f7;border-radius:8px;padding:9px 12px;display:flex;align-items:center;gap:7px;font-size:12px;color:#555;margin-top:1rem}
-.sum b{color:#1a1a2e;font-weight:600}
-.bclear{display:block;width:100%;margin-top:.75rem;padding:7px;border-radius:8px;border:.5px solid #ccc;background:transparent;color:#666;font-size:12px;cursor:pointer}
-.bclear:hover{background:#eee}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.pulse{animation:pulse 1.2s infinite}
+.stxt{font-size:12px;color:#555}
+.stxt.ok{color:#1b5e20;font-weight:600}
+.stxt.err{color:#c62828;font-weight:600}
+.dots{display:flex;gap:4px;align-items:center}
+.dot{width:7px;height:7px;border-radius:50%;background:#dde3ea;transition:background .25s}
+.dot.act{background:#1565C0}
+.dot.ok{background:#1b5e20}
+.dot.err{background:#c62828}
+.sum{background:#fff;border:1px solid #dde3ea;border-radius:10px;padding:10px 14px;display:flex;align-items:center;gap:8px;font-size:13px;color:#444;margin-top:1rem}
+.sum b{color:#0D1B2A;font-weight:700}
+.bclear{display:block;width:100%;margin-top:.75rem;padding:9px;border-radius:8px;border:1.5px solid #cdd5df;background:#fff;color:#555;font-size:13px;cursor:pointer;font-weight:600;transition:background .15s}
+.bclear:hover{background:#f0f4f8}
+.status-bar{margin-top:1rem;background:#0D1B2A;color:#90CAF9;font-size:12px;font-family:monospace;padding:8px 12px;border-radius:8px;display:none}
+.status-bar.show{display:block}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.pulse{animation:pulse 1.1s infinite}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="hdr">
-    <h2>Maquetador profesional de Excel</h2>
-    <p>Arrastra archivos Excel o CSV — se transforman y descargan automáticamente. Todo funciona en local, sin servidor.</p>
+    <h1>Maquetador profesional de Excel</h1>
+    <p>Arrastra uno o varios archivos Excel o CSV. El servidor local aplica el diseño profesional con openpyxl y descarga automáticamente el archivo transformado.</p>
   </div>
+
+  <div class="notice" id="notice">
+    El servidor no responde en <b>http://127.0.0.1:7432</b>. Asegúrate de haber ejecutado <code>python3 maquetador_server.py</code> antes de usar esta página.
+  </div>
+
   <div class="zone" id="zone">
     <input type="file" id="fin" multiple accept=".xlsx,.xls,.csv,.tsv">
     <div class="zi">
-      <svg viewBox="0 0 20 20" fill="none">
-        <path d="M10 3v10M6 9l4 4 4-4" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-        <path d="M4 16h12" stroke="#378ADD" stroke-width="1.5" stroke-linecap="round"/>
+      <svg viewBox="0 0 28 28" fill="none">
+        <path d="M14 4v14M8 12l6 6 6-6" stroke="#1565C0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M4 22h20" stroke="#1565C0" stroke-width="2" stroke-linecap="round"/>
       </svg>
     </div>
     <div class="zt">Arrastra archivos aquí</div>
-    <div class="zs">o haz clic para seleccionar</div>
+    <div class="zs">o haz clic para seleccionarlos</div>
     <div class="tags">
       <span class="tag">.xlsx</span>
       <span class="tag">.xls</span>
@@ -71,23 +81,27 @@ body{font-family:Arial,sans-serif;background:#f4f6f9;color:#1a1a2e;padding:1.5re
       <span class="tag">.tsv</span>
     </div>
   </div>
+
+  <div class="status-bar" id="sbar">Comprobando servidor...</div>
   <div class="queue" id="queue"></div>
   <div id="foot"></div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 <script>
+const SERVER = 'http://127.0.0.1:7432/maquesta';
 const zone = document.getElementById('zone');
 const fin  = document.getElementById('fin');
 const q    = document.getElementById('queue');
 const foot = document.getElementById('foot');
-const STEPS = ['Leyendo','Analizando','Formateando','Guardando','Descargando'];
+const sbar = document.getElementById('sbar');
+const notice = document.getElementById('notice');
+const STEPS = ['Leyendo','Enviando','Procesando','Formateando','Descargando'];
 let stats = {t:0, d:0, e:0};
 
 zone.addEventListener('dragover',  ev => { ev.preventDefault(); zone.classList.add('over'); });
 zone.addEventListener('dragleave', ()  => zone.classList.remove('over'));
 zone.addEventListener('drop',      ev  => { ev.preventDefault(); zone.classList.remove('over'); go(ev.dataTransfer.files); });
-fin.addEventListener('change',     ()  => go(fin.files));
+fin.addEventListener('change',     ()  => { go(fin.files); });
 
 function go(files) {
   [...files].forEach(f => {
@@ -99,10 +113,10 @@ function go(files) {
 }
 
 function mkCard(f, ext) {
-  const id = 'c' + Date.now() + Math.random().toString(36).slice(2);
-  const kb = (f.size / 1024).toFixed(1);
+  const id  = 'c' + Date.now() + Math.random().toString(36).slice(2);
+  const kb  = (f.size / 1024).toFixed(1);
   const isXl = ['xlsx','xls'].includes(ext);
-  const el = document.createElement('div');
+  const el  = document.createElement('div');
   el.className = 'card'; el.id = id;
   el.innerHTML = `
     <div class="ctop">
@@ -124,15 +138,15 @@ function upd(id, step, pct, msg, state='') {
   const st = document.getElementById('st' + id);
   if (!pb || !st) return;
   pb.style.width = pct + '%';
-  pb.className = 'pb' + (state==='ok' ? ' ok' : state==='err' ? ' err' : '');
-  st.className  = 'stxt' + (state==='ok' ? ' ok' : state==='err' ? ' err' : ' pulse');
+  pb.className   = 'pb' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : '');
+  st.className   = 'stxt' + (state === 'ok' ? ' ok' : state === 'err' ? ' err' : ' pulse');
   st.textContent = msg;
   for (let i = 0; i < STEPS.length; i++) {
     const d = document.getElementById(`d${id}${i}`);
     if (!d) continue;
     d.className = 'dot';
-    if (i < step)  d.classList.add('ok');
-    else if (i === step) d.classList.add(state==='err' ? 'err' : 'act');
+    if (i < step)        d.classList.add('ok');
+    else if (i === step) d.classList.add(state === 'err' ? 'err' : 'act');
   }
 }
 
@@ -142,27 +156,44 @@ async function run(file, ext) {
   const id = mkCard(file, ext);
   try {
     upd(id, 0, 10, 'Leyendo archivo...');
-    const { rows } = await readFile(file, ext);
+    await w(100);
+
+    upd(id, 1, 25, 'Enviando al servidor...');
+    const form = new FormData();
+    form.append('file', file);
+    form.append('filename', file.name);
+
+    upd(id, 2, 45, 'Procesando con openpyxl...');
+    let resp;
+    try {
+      resp = await fetch(SERVER, { method: 'POST', body: form });
+    } catch(e) {
+      notice.classList.add('show');
+      throw new Error('Servidor no disponible — ejecuta maquetador_server.py');
+    }
+
+    if (!resp.ok) {
+      const err = await resp.json().catch(() => ({error: 'Error desconocido'}));
+      throw new Error(err.error || `HTTP ${resp.status}`);
+    }
+
+    upd(id, 3, 70, 'Aplicando diseño profesional...');
+    const blob = await resp.blob();
     await w(150);
 
-    upd(id, 1, 30, 'Analizando estructura...');
-    await w(150);
-    const info = analyze(rows);
-
-    upd(id, 2, 55, 'Aplicando diseño profesional...');
-    await w(200);
-    const blob = buildXlsx(rows, info, file.name);
-
-    upd(id, 3, 80, 'Generando archivo...');
-    await w(150);
-
-    upd(id, 4, 95, 'Descargando...');
+    upd(id, 4, 92, 'Descargando...');
     const outName = file.name.replace(/\.(xlsx|xls|csv|tsv)$/i, '') + '_PRO.xlsx';
-    download(blob, outName);
+    const url = URL.createObjectURL(blob);
+    const a   = document.createElement('a');
+    a.href = url; a.download = outName;
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
     await w(200);
 
     upd(id, 4, 100, 'Listo — ' + outName, 'ok');
+    notice.classList.remove('show');
     stats.d++;
+
   } catch(err) {
     upd(id, 0, 100, 'Error: ' + err.message, 'err');
     stats.e++;
@@ -170,205 +201,17 @@ async function run(file, ext) {
   updateFoot();
 }
 
-function readFile(file, ext) {
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    if (['csv','tsv'].includes(ext)) {
-      r.onload = e => {
-        const sep  = ext === 'tsv' ? '\t' : detectSep(e.target.result);
-        const rows = parseCSV(e.target.result, sep);
-        res({ rows });
-      };
-      r.onerror = () => rej(new Error('No se pudo leer'));
-      r.readAsText(file, 'UTF-8');
-    } else {
-      r.onload = e => {
-        try {
-          const wb   = XLSX.read(new Uint8Array(e.target.result), { type: 'array' });
-          const ws   = wb.Sheets[wb.SheetNames[0]];
-          const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-          res({ rows });
-        } catch(ex) { rej(new Error('Formato no reconocido')); }
-      };
-      r.onerror = () => rej(new Error('Error de lectura'));
-      r.readAsArrayBuffer(file);
-    }
-  });
-}
-
-function detectSep(text) {
-  const line = text.split('\n')[0] || '';
-  return ((line.match(/;/g) || []).length > (line.match(/,/g) || []).length) ? ';' : ',';
-}
-
-function parseCSV(text, sep) {
-  return text.split('\n').filter(l => l.trim()).map(l => {
-    const cells = []; let cur = '', inQ = false;
-    for (let i = 0; i < l.length; i++) {
-      if (l[i] === '"') { inQ = !inQ; }
-      else if (l[i] === sep && !inQ) { cells.push(cur.trim()); cur = ''; }
-      else cur += l[i];
-    }
-    cells.push(cur.trim());
-    return cells;
-  });
-}
-
-function analyze(rows) {
-  if (!rows.length) return { cols: 0, hasHeader: false, sections: [] };
-  const cols = Math.max(...rows.map(r => r.length));
-  const first = rows[0].map(c => String(c));
-  const hasHeader = first.some(c => isNaN(c) && c.length > 0);
-  const sections = [];
-  rows.forEach((r, i) => {
-    if (i === 0) return;
-    const filled = r.filter(c => String(c).trim()).length;
-    if (filled === 1 && cols > 1) {
-      const v = String(r[0] || r.find(x => x));
-      if (v && v.length > 3 && v.length < 80) sections.push(i);
-    }
-  });
-  return { cols, hasHeader, sections };
-}
-
-function buildXlsx(rows, info, fileName) {
-  const { cols, hasHeader, sections } = info;
-  const C  = cols || 1;
-  const wb = XLSX.utils.book_new();
-  const ws = {};
-  if (!ws['!rows']) ws['!rows'] = [];
-
-  const NAVY = 'FF0D1B2A', MID  = 'FF1B3A5C', ACC  = 'FF1565C0', CYAN = 'FF00BCD4';
-  const WHITE = 'FFFFFFFF', SUB  = 'FF90CAF9', DARK = 'FF0D1B2A';
-  const R1   = 'FFF5F9FF',  R2   = 'FFE8EEF4', GREY = 'FFB0BEC5';
-  const SEC_COLORS = [
-    ['FF004D40','FF00695C'], ['FF0D47A1','FF1565C0'],
-    ['FF1B5E20','FF2E7D32'], ['FF006064','FF00838F'],
-    ['FF4A148C','FF6A1B9A'], ['FF37474F','FF455A64'],
-  ];
-
-  const s  = argb         => ({ patternType: 'solid', fgColor: { argb } });
-  const f  = (sz,bold,argb) => ({ sz, bold, color: { argb }, name: 'Calibri' });
-  const b  = (st, argb)   => { const x = { style: st, color: { argb } }; return { top:x, bottom:x, left:x, right:x }; };
-  const al = (h, v='center', wrap=false) => ({ horizontal: h, vertical: v, wrapText: wrap });
-
-  let R = 0;
-
-  const cell = (r, c, v, fill, font, align, border) => {
-    const addr = XLSX.utils.encode_cell({ r, c });
-    ws[addr] = { v: v ?? '', t: 's', s: { fill, font, alignment: align, border } };
-  };
-
-  const row = (vals, fillA, fSz, fBold, fColor, aH, h, brd) => {
-    ws['!rows'][R] = { hpt: h || 18 };
-    for (let c = 0; c < C; c++) {
-      cell(R, c,
-        c < vals.length ? String(vals[c] ?? '') : '',
-        s(fillA), f(fSz, fBold, fColor),
-        al(c === 0 && C > 1 ? 'center' : aH),
-        brd || b('thin', GREY)
-      );
-    }
-    R++;
-  };
-
-  const baseName = fileName.replace(/\.(xlsx|xls|csv|tsv)$/i, '').replace(/_/g,' ').toUpperCase();
-
-  row([baseName], NAVY, 16, true, WHITE, 'center', 34,
-    { top:    { style:'medium', color:{ argb:CYAN } },
-      bottom: { style:'thin',   color:{ argb:ACC  } },
-      left:   { style:'medium', color:{ argb:CYAN } },
-      right:  { style:'medium', color:{ argb:CYAN } } });
-
-  row(['Documento generado por Maquetador Pro · Web de Javi: _TJ'],
-    MID, 9, false, SUB, 'center', 16, b('thin', MID));
-
-  if (hasHeader && rows.length > 0) {
-    ws['!rows'][R] = { hpt: 22 };
-    rows[0].forEach((v, c) => {
-      cell(R, c, String(v ?? ''), s(ACC), f(10, true, WHITE), al('center'), b('thin', NAVY));
-    });
-    R++;
-  }
-
-  let secIdx = 0;
-  const startData = hasHeader ? 1 : 0;
-  let altI = 0;
-
-  for (let i = startData; i < rows.length; i++) {
-    const isSec = sections.includes(i);
-    if (isSec) {
-      const [bg, acc] = SEC_COLORS[secIdx % SEC_COLORS.length]; secIdx++;
-      const v = String(rows[i].find(x => String(x).trim()) || '');
-      ws['!rows'][R] = { hpt: 20 };
-      for (let c = 0; c < C; c++) {
-        cell(R, c, c === 0 ? v : '', s(bg), f(10, true, WHITE), al('left'),
-          { top:    { style:'medium', color:{ argb:CYAN } },
-            bottom: { style:'thin',   color:{ argb:acc  } },
-            left:   { style:'medium', color:{ argb:CYAN } },
-            right:  { style:'medium', color:{ argb:CYAN } } });
-      }
-      R++; altI = 0;
-    } else {
-      const bg = altI % 2 === 0 ? R1 : R2; altI++;
-      ws['!rows'][R] = { hpt: 18 };
-      rows[i].forEach((v, c) => {
-        const isNum = !isNaN(String(v).trim()) && String(v).trim() !== '';
-        cell(R, c, String(v ?? ''), s(bg), f(10, false, DARK),
-          al(isNum ? 'center' : 'left'), b('thin', GREY));
-      });
-      R++;
-    }
-  }
-
-  row(['Web de Javi: _TJ  ·  Maquetador profesional  ·  Ayuntamiento de Llanes'],
-    NAVY, 8, false, 'FF78909C', 'center', 16, b('thin', NAVY));
-
-  const merges = [];
-  if (C > 1) {
-    merges.push({ s:{r:0,c:0}, e:{r:0,c:C-1} });
-    merges.push({ s:{r:1,c:0}, e:{r:1,c:C-1} });
-    merges.push({ s:{r:R-1,c:0}, e:{r:R-1,c:C-1} });
-    sections.forEach(si => {
-      const xlRow = si + (hasHeader ? 3 : 2);
-      if (xlRow < R) merges.push({ s:{r:xlRow,c:0}, e:{r:xlRow,c:C-1} });
-    });
-  }
-  ws['!merges'] = merges;
-  ws['!ref']    = XLSX.utils.encode_range({ r:0, c:0 }, { r:R-1, c:C-1 });
-
-  const colW = [];
-  for (let c = 0; c < C; c++) {
-    const mx = Math.max(...rows.map(r => String(r[c] || '').length), 6);
-    colW.push({ wch: Math.min(mx + 4, 48) });
-  }
-  ws['!cols'] = colW;
-
-  XLSX.utils.book_append_sheet(wb, ws, 'Datos');
-
-  const out = XLSX.write(wb, { bookType:'xlsx', type:'array', cellStyles:true });
-  return new Blob([out], { type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-}
-
-function download(blob, name) {
-  const url = URL.createObjectURL(blob);
-  const a   = document.createElement('a');
-  a.href = url; a.download = name;
-  document.body.appendChild(a); a.click();
-  setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 1000);
-}
-
 function updateFoot() {
   const pen = stats.t - stats.d - stats.e;
   let html = `<div class="sum">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-      <circle cx="7" cy="7" r="6" stroke="#1D9E75" stroke-width="1.2"/>
-      <path d="M4 7l2 2 4-4" stroke="#1D9E75" stroke-width="1.2" stroke-linecap="round"/>
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="7" stroke="#1b5e20" stroke-width="1.5"/>
+      <path d="M5 8l2 2 4-4" stroke="#1b5e20" stroke-width="1.5" stroke-linecap="round"/>
     </svg>
     <span>
-      <b>${stats.d}</b> completado${stats.d!==1?'s':''} ·
+      <b>${stats.d}</b> completado${stats.d!==1?'s':''} &nbsp;·&nbsp;
       <b>${stats.e}</b> error${stats.e!==1?'es':''}
-      ${pen > 0 ? `· <b>${pen}</b> en proceso` : ''}
+      ${pen > 0 ? `&nbsp;·&nbsp; <b>${pen}</b> en proceso` : ''}
     </span>
   </div>`;
   if (pen === 0) html += `<button class="bclear" id="bcl">Limpiar lista</button>`;
@@ -379,6 +222,20 @@ function updateFoot() {
     stats = {t:0, d:0, e:0}; fin.value = '';
   };
 }
+
+// Comprobar servidor al cargar
+window.addEventListener('load', async () => {
+  sbar.classList.add('show');
+  sbar.textContent = 'Comprobando servidor local...';
+  try {
+    const r = await fetch(SERVER, { method: 'OPTIONS', signal: AbortSignal.timeout(2000) });
+    sbar.textContent = 'Servidor activo en http://127.0.0.1:7432';
+    setTimeout(() => sbar.classList.remove('show'), 2000);
+  } catch(e) {
+    sbar.textContent = 'Servidor NO detectado — ejecuta: python3 maquetador_server.py';
+    notice.classList.add('show');
+  }
+});
 </script>
 </body>
 </html>
